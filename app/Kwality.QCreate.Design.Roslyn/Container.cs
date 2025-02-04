@@ -44,13 +44,8 @@ public sealed class Container : global::Kwality.QCreate.Abstractions.IContainer
     /// </summary>
     public Container()
     {
-        global::System.Collections.Generic.IEnumerable<global::Kwality.QCreate.Data.TypeBuilderDefinition> userDefinedTypeBuilders =
-            global::Kwality.QCreate.UserBasedGeneratedTypeBuilders.GetTypeBuildersDefinition();
-
-        foreach (global::Kwality.QCreate.Data.TypeBuilderDefinition? definition in userDefinedTypeBuilders)
-        {
-            this.Register(definition.Type, definition.Builder);
-        }
+        this.RegisterGeneratorCreatedTypeBuilders();
+        this.RegisterUserDefinedTypeBuilders();
     }
 
     /// <inheritdoc />
@@ -89,6 +84,28 @@ public sealed class Container : global::Kwality.QCreate.Abstractions.IContainer
         this.typeBuilders[typeof(T)] = builder;
 
     private void Register(global::System.Type type, global::System.Object builder) => this.typeBuilders[type] = builder;
+
+    private void RegisterUserDefinedTypeBuilders()
+    {
+        global::System.Collections.Generic.IEnumerable<global::Kwality.QCreate.Data.TypeBuilderDefinition> userDefinedTypeBuilders =
+            global::Kwality.QCreate.UserBasedGeneratedTypeBuilders.GetTypeBuildersDefinition();
+
+        foreach (global::Kwality.QCreate.Data.TypeBuilderDefinition? definition in userDefinedTypeBuilders)
+        {
+            this.Register(definition.Type, definition.Builder);
+        }
+    }
+
+    private void RegisterGeneratorCreatedTypeBuilders()
+    {
+        global::System.Collections.Generic.IEnumerable<global::Kwality.QCreate.Data.TypeBuilderDefinition> userDefinedTypeBuilders =
+            global::Kwality.QCreate.GeneratorBasedGeneratedTypeBuilders.GetTypeBuildersDefinition();
+
+        foreach (global::Kwality.QCreate.Data.TypeBuilderDefinition? definition in userDefinedTypeBuilders)
+        {
+            this.Register(definition.Type, definition.Builder);
+        }
+    }
 
     private sealed class TypeBuilderMap : System.Collections.Generic.Dictionary<global::System.Type, object>;
 }
