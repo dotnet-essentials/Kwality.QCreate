@@ -49,5 +49,19 @@ public sealed class Container
             );
     }
 
+    /// <summary>
+    ///     Create 3 instances of T.
+    /// </summary>
+    /// <typeparam name="T">The type to create.</typeparam>
+    /// <returns>A collection containing 3 instances of T.</returns>
+    /// <exception cref="global::Kwality.QCreate.Exceptions.QCreateException">An instance of T couldn't be created.</exception>
+    public global::System.Collections.Generic.IEnumerable<T> CreateMany<T>()
+    {
+        for (var i = 0; i < 3; i++)
+        {
+            yield return this.Create<T>();
+        }
+    }
+
     private sealed class TypeBuilderMap : System.Collections.Generic.Dictionary<global::System.Type, object>;
 }
