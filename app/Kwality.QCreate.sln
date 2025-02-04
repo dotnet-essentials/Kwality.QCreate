@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "000. ROOT.", "000. ROOT.", "{8B56B1EA-BB6B-4B17-AD37-E9B0BFB1AFAB}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\.gitignore = ..\.gitignore
+		..\LICENSE = ..\LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "001. DESIGN.", "001. DESIGN.", "{29C08281-465A-4315-9DFE-E6C8E16602E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kwality.QCreate.Design", "Kwality.QCreate.Design\Kwality.QCreate.Design.csproj", "{93843178-2FED-4062-93D7-593E0B2770DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kwality.QCreate.Design.Roslyn", "Kwality.QCreate.Design.Roslyn\Kwality.QCreate.Design.Roslyn.csproj", "{C7F89F70-8AB4-4274-A9D8-CFF4BB57B4E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kwality.QCreate.Design.QA", "Kwality.QCreate.Design.QA\Kwality.QCreate.Design.QA.csproj", "{2834F100-2FCD-44F7-AD74-8A0782AA8A19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "100. SOURCE.", "100. SOURCE.", "{9008CD89-55D7-4308-A0E2-18E3E3061600}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "200. QUALITY ASSURANCE.", "200. QUALITY ASSURANCE.", "{D5CE8F03-F6A3-4CE2-85E9-1BCD113AD538}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9008CD89-55D7-4308-A0E2-18E3E3061600} = {29C08281-465A-4315-9DFE-E6C8E16602E4}
+		{D5CE8F03-F6A3-4CE2-85E9-1BCD113AD538} = {29C08281-465A-4315-9DFE-E6C8E16602E4}
+		{93843178-2FED-4062-93D7-593E0B2770DE} = {9008CD89-55D7-4308-A0E2-18E3E3061600}
+		{2834F100-2FCD-44F7-AD74-8A0782AA8A19} = {D5CE8F03-F6A3-4CE2-85E9-1BCD113AD538}
+		{C7F89F70-8AB4-4274-A9D8-CFF4BB57B4E3} = {9008CD89-55D7-4308-A0E2-18E3E3061600}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93843178-2FED-4062-93D7-593E0B2770DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93843178-2FED-4062-93D7-593E0B2770DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93843178-2FED-4062-93D7-593E0B2770DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93843178-2FED-4062-93D7-593E0B2770DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F89F70-8AB4-4274-A9D8-CFF4BB57B4E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F89F70-8AB4-4274-A9D8-CFF4BB57B4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F89F70-8AB4-4274-A9D8-CFF4BB57B4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F89F70-8AB4-4274-A9D8-CFF4BB57B4E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2834F100-2FCD-44F7-AD74-8A0782AA8A19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2834F100-2FCD-44F7-AD74-8A0782AA8A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2834F100-2FCD-44F7-AD74-8A0782AA8A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2834F100-2FCD-44F7-AD74-8A0782AA8A19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
