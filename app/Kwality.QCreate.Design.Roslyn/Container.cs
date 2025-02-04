@@ -27,7 +27,7 @@ namespace Kwality.QCreate;
 /// <summary>
 ///     Container used to create objects.
 /// </summary>
-public sealed class Container
+public sealed class Container : global::Kwality.QCreate.Abstractions.IContainer
 {
     private readonly TypeBuilderMap typeBuilders = new()
     {
@@ -39,36 +39,21 @@ public sealed class Container
         { typeof(long), new global::Kwality.QCreate.Builders.System.Int64TypeBuilder() },
     };
 
-    /// <summary>
-    ///     The total number of elements to create when using <see cref="CreateMany{T}" />.
-    /// </summary>
+    /// <inheritdoc />
     /// <remarks>Defaults to 3.</remarks>
     public int RepeatCount { get; set; } = 3;
 
-    /// <summary>
-    ///     Create an instance of T.
-    /// </summary>
-    /// <typeparam name="T">The type to create.</typeparam>
-    /// <param name="request">The request that describes how to create an instance of T.</param>
-    /// <returns>An instance of T.</returns>
-    /// <exception cref="global::Kwality.QCreate.Exceptions.QCreateException">An instance of T couldn't be created.</exception>
+    /// <inheritdoc />
     public T Create<T>(global::Kwality.QCreate.Requests.Abstractions.Request? request = null)
     {
         return this.typeBuilders.TryGetValue(typeof(T), out var builder)
-            ? ((global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder<T>)builder).Create(request)
+            ? ((global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder<T>)builder).Create(this, request)
             : throw new global::Kwality.QCreate.Exceptions.QCreateException(
                 $"No builder registered for type '{typeof(T)}'."
             );
     }
 
-    /// <summary>
-    ///     Create multiple instances of T.
-    ///     The amount of instances that's returned is equal to <see cref="RepeatCount" />, which defaults to 3.
-    /// </summary>
-    /// <typeparam name="T">The type to create.</typeparam>
-    /// <param name="request">The request that describes how to create an instance of T.</param>
-    /// <returns>A collection containing multiple instances of T.</returns>
-    /// <exception cref="global::Kwality.QCreate.Exceptions.QCreateException">An instance of T couldn't be created.</exception>
+    /// <inheritdoc />
     public global::System.Collections.Generic.IEnumerable<T> CreateMany<T>(
         global::Kwality.QCreate.Requests.Abstractions.Request? request = null
     )
@@ -78,6 +63,16 @@ public sealed class Container
             yield return this.Create<T>(request);
         }
     }
+
+    /// <summary>
+    ///     Register a custom <see cref="global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder{T}" /> used to
+    ///     create an instance of T. If another builder which create an instance of T is already registered, it gets
+    ///     replaced with this one.
+    /// </summary>
+    /// <param name="builder">The builder used to create an instance of T.</param>
+    /// <typeparam name="T">The type the builder can create.</typeparam>
+    public void Register<T>(global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder<T> builder) =>
+        this.typeBuilders[typeof(T)] = builder;
 
     private sealed class TypeBuilderMap : System.Collections.Generic.Dictionary<global::System.Type, object>;
 }

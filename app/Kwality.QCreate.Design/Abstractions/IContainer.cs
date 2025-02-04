@@ -22,22 +22,37 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-namespace Kwality.QCreate.Builders.Abstractions;
+namespace Kwality.QCreate.Abstractions;
 
-using Kwality.QCreate.Abstractions;
+using Kwality.QCreate.Exceptions;
 using Kwality.QCreate.Requests.Abstractions;
 
 /// <summary>
-///     API for creating a single instance of T.
+///     API for creating anonymous objects.
 /// </summary>
-/// <typeparam name="T">The type of the object that can be created by this builder.</typeparam>
-public interface ITypeBuilder<out T>
+public interface IContainer
 {
+    /// <summary>
+    ///     The total number of elements to create when using <see cref="CreateMany{T}" />.
+    /// </summary>
+    int RepeatCount { get; set; }
+
     /// <summary>
     ///     Create an instance of T.
     /// </summary>
-    /// <param name="container">The <see cref="IContainer" /> through which causes this method to be called.</param>
-    /// <param name="request">The request that describes how to an instance of T was requested.</param>
+    /// <typeparam name="T">The type to create.</typeparam>
+    /// <param name="request">The request that describes how to create an instance of T.</param>
     /// <returns>An instance of T.</returns>
-    T Create(IContainer container, Request? request);
+    /// <exception cref="QCreateException">An instance of T couldn't be created.</exception>
+    T Create<T>(Request? request = null);
+
+    /// <summary>
+    ///     Create multiple instances of T.
+    ///     The amount of instances that's returned is equal to <see cref="RepeatCount" />, which defaults to 3.
+    /// </summary>
+    /// <typeparam name="T">The type to create.</typeparam>
+    /// <param name="request">The request that describes how to create an instance of T.</param>
+    /// <returns>A collection containing multiple instances of T.</returns>
+    /// <exception cref="QCreateException">An instance of T couldn't be created.</exception>
+    IEnumerable<T> CreateMany<T>(Request? request = null);
 }

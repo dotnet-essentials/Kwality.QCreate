@@ -25,8 +25,11 @@
 #pragma warning disable CS1591
 namespace Kwality.QCreate.Design.QA;
 
+using Kwality.QCreate.Abstractions;
+using Kwality.QCreate.Builders.Abstractions;
 using Kwality.QCreate.Design.QA.Extensions;
 using Kwality.QCreate.Exceptions;
+using Kwality.QCreate.Requests.Abstractions;
 using Xunit;
 
 public sealed partial class ContainerTests
@@ -75,5 +78,45 @@ public sealed partial class ContainerTests
         Assert.False(result[1], "The 2nd created 'bool' should have the value 'false'.");
         Assert.True(result[2], "The 3rd created 'bool' should have the value 'true'.");
         Assert.False(result[1], "The 4th created 'bool' should have the value 'false'.");
+    }
+
+    [Fact(DisplayName = "'Register<T>': Overwrites the built-in builder for 'T'.")]
+    internal void Register_custom_builder_overwrites_the_built_in_builder()
+    {
+        // ARRANGE.
+        var container = new Container();
+
+        // ACT.
+        container.Register(new FixedStringTypeBuilder());
+        var result = container.Create<string>();
+
+        // ASSERT.
+        Assert.True("Hello, World!" == result, "The generated string must be 'Hello, World!'.");
+    }
+
+    [Fact(DisplayName = "'Register<T>': Adds the new builder for 'T'.")]
+    internal void Register_custom_builder_adds_new_builder()
+    {
+        // ARRANGE.
+        var container = new Container();
+
+        // ACT.
+        container.Register(new CoordinateTypeBuilder());
+        (int, int) r1 = container.Create<(int, int)>();
+        (int, int) r2 = container.Create<(int, int)>();
+
+        // ASSERT.
+        Assert.True(r1 != r2, "The generated values must be unique.");
+    }
+
+    private sealed class FixedStringTypeBuilder : ITypeBuilder<string>
+    {
+        public string Create(IContainer container, Request? request) => "Hello, World!";
+    }
+
+    private sealed class CoordinateTypeBuilder : ITypeBuilder<(int, int)>
+    {
+        public (int, int) Create(IContainer container, Request? _) =>
+            (container.Create<int>(), container.Create<int>());
     }
 }

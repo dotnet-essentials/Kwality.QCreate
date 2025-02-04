@@ -26,6 +26,8 @@ namespace Kwality.QCreate.Builders.System;
 
 internal sealed class GuidTypeBuilder : global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder<global::System.Guid>
 {
-    public global::System.Guid Create(global::Kwality.QCreate.Requests.Abstractions.Request? request) =>
-        global::System.Guid.NewGuid();
+    public global::System.Guid Create(
+        global::Kwality.QCreate.Abstractions.IContainer container,
+        global::Kwality.QCreate.Requests.Abstractions.Request? request
+    ) => global::System.Guid.NewGuid();
 }
