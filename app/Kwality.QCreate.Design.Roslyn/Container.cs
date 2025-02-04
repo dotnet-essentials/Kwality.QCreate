@@ -39,6 +39,20 @@ public sealed class Container : global::Kwality.QCreate.Abstractions.IContainer
         { typeof(long), new global::Kwality.QCreate.Builders.System.Int64TypeBuilder() },
     };
 
+    /// <summary>
+    ///     Create a new <see cref="Container" /> instance.
+    /// </summary>
+    public Container()
+    {
+        global::System.Collections.Generic.IEnumerable<global::Kwality.QCreate.Data.TypeBuilderDefinition> userDefinedTypeBuilders =
+            global::Kwality.QCreate.UserBasedGeneratedTypeBuilders.GetTypeBuildersDefinition();
+
+        foreach (global::Kwality.QCreate.Data.TypeBuilderDefinition? definition in userDefinedTypeBuilders)
+        {
+            this.Register(definition.Type, definition.Builder);
+        }
+    }
+
     /// <inheritdoc />
     /// <remarks>Defaults to 3.</remarks>
     public int RepeatCount { get; set; } = 3;
@@ -73,6 +87,8 @@ public sealed class Container : global::Kwality.QCreate.Abstractions.IContainer
     /// <typeparam name="T">The type the builder can create.</typeparam>
     public void Register<T>(global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder<T> builder) =>
         this.typeBuilders[typeof(T)] = builder;
+
+    private void Register(global::System.Type type, global::System.Object builder) => this.typeBuilders[type] = builder;
 
     private sealed class TypeBuilderMap : System.Collections.Generic.Dictionary<global::System.Type, object>;
 }
