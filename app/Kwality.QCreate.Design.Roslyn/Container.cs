@@ -32,6 +32,11 @@ public sealed class Container
     private readonly TypeBuilderMap typeBuilders = new()
     {
         { typeof(bool), new global::Kwality.QCreate.Builders.System.BoolTypeBuilder() },
+        { typeof(string), new global::Kwality.QCreate.Builders.System.StringTypeBuilder() },
+        { typeof(global::System.Guid), new global::Kwality.QCreate.Builders.System.GuidTypeBuilder() },
+        { typeof(short), new global::Kwality.QCreate.Builders.System.Int16TypeBuilder() },
+        { typeof(int), new global::Kwality.QCreate.Builders.System.Int32TypeBuilder() },
+        { typeof(long), new global::Kwality.QCreate.Builders.System.Int64TypeBuilder() },
     };
 
     /// <summary>
