@@ -23,23 +23,29 @@
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
 #pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA;
+namespace Kwality.QCreate.Design.QA.Generated;
 
+using Kwality.QCreate.Design.QA.Extensions;
+using Kwality.QCreate.Models;
 using Xunit;
 
-public sealed partial class ContainerTests
+public sealed class ContainerTests
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'GUID' a unique 'GUID' is returned.")]
-    internal void Create_guid_returns_a_unique_guid()
+    [Fact(DisplayName = "'Create<T>': When 'T' is a 'Person' a unique 'Person' is returned.")]
+    internal void Create_person_returns_a_unique_person()
     {
         // ARRANGE.
         var container = new Container();
 
         // ACT.
-        Guid r1 = container.Create<Guid>();
-        Guid r2 = container.Create<Guid>();
+        Person r1 = container.Create<Person>();
+        Person r2 = container.Create<Person>();
 
         // ASSERT.
-        Assert.True(r1 != r2, "The generated GUIDs must be unique.");
+        Assert.True(r1 != r2, "The generated values must be unique.");
+        r1.FirstName.AssertHasPrefix("FirstName_");
+        r2.FirstName.AssertEndsWithGuid("FirstName_");
+        r1.LastName.AssertHasPrefix("LastName_");
+        r2.LastName.AssertEndsWithGuid("LastName_");
     }
 }

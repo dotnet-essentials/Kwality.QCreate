@@ -32,7 +32,7 @@ using Kwality.QCreate.Exceptions;
 using Kwality.QCreate.Requests.Abstractions;
 using Xunit;
 
-public sealed partial class ContainerTests
+public sealed class ContainerTests
 {
     [Fact(DisplayName = "'Create<T>': When 'T' is a type for which NO builder is present, an exception is raised.")]
     internal void Create_unsupported_throws()

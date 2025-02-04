@@ -23,24 +23,28 @@
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
 #pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA;
+namespace Kwality.QCreate.Design.QA.System;
 
-using Kwality.QCreate.Models;
 using Xunit;
 
 public sealed partial class ContainerTests
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'Square' a unique 'Square' is returned.")]
-    internal void Create_square_returns_a_unique_square()
+    [Fact(DisplayName = "'Create<T>': When 'T' is a 'bool' the results alternate between 'true' and 'false'.")]
+    internal void Create_bool_alternates_between_true_and_false()
     {
         // ARRANGE.
         var container = new Container();
 
         // ACT.
-        Square r1 = container.Create<Square>();
-        Square r2 = container.Create<Square>();
+        var r1 = container.Create<bool>();
+        var r2 = container.Create<bool>();
+        var r3 = container.Create<bool>();
+        var r4 = container.Create<bool>();
 
         // ASSERT.
-        Assert.True(r1 != r2, "The generated values must be unique.");
+        Assert.True(r1, "The 1st time a 'bool' is created, it should have the value 'true'.");
+        Assert.False(r2, "The 2nd time a 'bool' is created, it should have the value 'false'.");
+        Assert.True(r3, "The 3rd time a 'bool' is created, it should have the value 'true'.");
+        Assert.False(r4, "The 4th time a 'bool' is created, it should have the value 'false'.");
     }
 }

@@ -23,23 +23,24 @@
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
 #pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA;
+namespace Kwality.QCreate.Design.QA.User;
 
+using Kwality.QCreate.Models;
 using Xunit;
 
-public sealed partial class ContainerTests
+public sealed class ContainerTests
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is an 'Int32' a unique 'Int32' is returned.")]
-    internal void Create_int_returns_a_unique_int()
+    [Fact(DisplayName = "'Create<T>': When 'T' is a 'Square' a unique 'Square' is returned.")]
+    internal void Create_square_returns_a_unique_square()
     {
         // ARRANGE.
         var container = new Container();
 
         // ACT.
-        var r1 = container.Create<int>();
-        var r2 = container.Create<Int32>();
+        Square r1 = container.Create<Square>();
+        Square r2 = container.Create<Square>();
 
         // ASSERT.
-        Assert.True(r1 != r2, "The generated numbers must be unique.");
+        Assert.True(r1 != r2, "The generated values must be unique.");
     }
 }

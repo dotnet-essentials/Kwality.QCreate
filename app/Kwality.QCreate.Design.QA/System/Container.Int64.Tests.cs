@@ -23,41 +23,23 @@
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
 #pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA;
+namespace Kwality.QCreate.Design.QA.System;
 
-using Kwality.QCreate.Design.QA.Extensions;
-using Kwality.QCreate.Requests;
 using Xunit;
 
 public sealed partial class ContainerTests
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
+    [Fact(DisplayName = "'Create<T>': When 'T' is an 'Int64' a unique 'Int64' is returned.")]
+    internal void Create_long_returns_a_unique_long()
     {
         // ARRANGE.
         var container = new Container();
 
         // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
+        var r1 = container.Create<long>();
+        var r2 = container.Create<Int64>();
 
         // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
+        Assert.True(r1 != r2, "The generated numbers must be unique.");
     }
 }
