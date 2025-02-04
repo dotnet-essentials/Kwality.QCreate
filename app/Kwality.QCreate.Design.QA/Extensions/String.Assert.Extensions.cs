@@ -28,11 +28,17 @@ using Xunit;
 
 internal static partial class AssertExtensions
 {
-    public static void AssertType<TException>(this Exception? ex, string message)
+    public static void AssertHasPrefix(this string value, string prefix)
     {
-        Assert.True(ex != null, "The exception should NOT be null.");
-        Assert.True(message == ex.Message, $"Exception should be '{message}', but found '{ex.Message}'.");
+        var startsWith = value.StartsWith(prefix, StringComparison.CurrentCulture);
 
-        _ = Assert.IsType<TException>(ex);
+        Assert.True(startsWith, $"The string should start with '{prefix}'.");
+    }
+
+    public static void AssertEndsWithGuid(this string value, string prefix)
+    {
+        var valueWithoutPrefix = value.Replace(prefix, "", StringComparison.CurrentCulture);
+
+        Assert.True(Guid.TryParse(valueWithoutPrefix, out _), "The string should end with a GUID.");
     }
 }

@@ -28,7 +28,7 @@ internal sealed class BoolTypeBuilder : global::Kwality.QCreate.Builders.Abstrac
 {
     private bool value;
 
-    public bool Create()
+    public bool Create(global::Kwality.QCreate.Requests.Abstractions.Request? request)
     {
         this.value = !this.value;
 

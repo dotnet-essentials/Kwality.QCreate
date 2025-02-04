@@ -25,6 +25,8 @@
 #pragma warning disable CS1591
 namespace Kwality.QCreate.Design.QA;
 
+using Kwality.QCreate.Design.QA.Extensions;
+using Kwality.QCreate.Requests;
 using Xunit;
 
 public sealed partial class ContainerTests
@@ -43,5 +45,19 @@ public sealed partial class ContainerTests
         Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
         Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
         Assert.True(r1 != r2, "The generated strings must be unique.");
+    }
+
+    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
+    internal void Create_string_with_seed_uses_the_seed_as_prefix()
+    {
+        // ARRANGE.
+        var container = new Container();
+
+        // ACT.
+        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
+
+        // ASSERT.
+        r1.AssertHasPrefix("Hello_");
+        r1.AssertEndsWithGuid("Hello_");
     }
 }

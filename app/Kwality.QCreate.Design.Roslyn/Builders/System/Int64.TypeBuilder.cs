@@ -29,7 +29,7 @@ internal sealed class Int64TypeBuilder : global::Kwality.QCreate.Builders.Abstra
 {
     private readonly global::System.Random random = new();
 
-    public long Create()
+    public long Create(global::Kwality.QCreate.Requests.Abstractions.Request? request)
     {
         var buffer = new byte[8];
         this.random.NextBytes(buffer);

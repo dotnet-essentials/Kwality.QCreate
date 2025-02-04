@@ -49,12 +49,13 @@ public sealed class Container
     ///     Create an instance of T.
     /// </summary>
     /// <typeparam name="T">The type to create.</typeparam>
+    /// <param name="request">The request that describes how to create an instance of T.</param>
     /// <returns>An instance of T.</returns>
     /// <exception cref="global::Kwality.QCreate.Exceptions.QCreateException">An instance of T couldn't be created.</exception>
-    public T Create<T>()
+    public T Create<T>(global::Kwality.QCreate.Requests.Abstractions.Request? request = null)
     {
         return this.typeBuilders.TryGetValue(typeof(T), out var builder)
-            ? ((global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder<T>)builder).Create()
+            ? ((global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder<T>)builder).Create(request)
             : throw new global::Kwality.QCreate.Exceptions.QCreateException(
                 $"No builder registered for type '{typeof(T)}'."
             );
@@ -65,13 +66,16 @@ public sealed class Container
     ///     The amount of instances that's returned is equal to <see cref="RepeatCount" />, which defaults to 3.
     /// </summary>
     /// <typeparam name="T">The type to create.</typeparam>
+    /// <param name="request">The request that describes how to create an instance of T.</param>
     /// <returns>A collection containing multiple instances of T.</returns>
     /// <exception cref="global::Kwality.QCreate.Exceptions.QCreateException">An instance of T couldn't be created.</exception>
-    public global::System.Collections.Generic.IEnumerable<T> CreateMany<T>()
+    public global::System.Collections.Generic.IEnumerable<T> CreateMany<T>(
+        global::Kwality.QCreate.Requests.Abstractions.Request? request = null
+    )
     {
         for (var i = 0; i < this.RepeatCount; i++)
         {
-            yield return this.Create<T>();
+            yield return this.Create<T>(request);
         }
     }
 

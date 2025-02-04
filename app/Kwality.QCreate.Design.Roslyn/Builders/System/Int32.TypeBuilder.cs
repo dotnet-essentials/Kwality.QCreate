@@ -29,5 +29,5 @@ internal sealed class Int32TypeBuilder : global::Kwality.QCreate.Builders.Abstra
 {
     private readonly global::System.Random random = new();
 
-    public int Create() => (short)this.random.Next();
+    public int Create(global::Kwality.QCreate.Requests.Abstractions.Request? request) => (short)this.random.Next();
 }

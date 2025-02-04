@@ -24,6 +24,8 @@
 // =====================================================================================================================
 namespace Kwality.QCreate.Builders.Abstractions;
 
+using Kwality.QCreate.Requests.Abstractions;
+
 /// <summary>
 ///     API for creating a single instance of T.
 /// </summary>
@@ -33,6 +35,7 @@ public interface ITypeBuilder<out T>
     /// <summary>
     ///     Create an instance of T.
     /// </summary>
+    /// <param name="request">The request that describes how to an instance of T was requested.</param>
     /// <returns>An instance of T.</returns>
-    T Create();
+    T Create(Request? request);
 }

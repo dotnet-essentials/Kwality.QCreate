@@ -22,17 +22,22 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-namespace Kwality.QCreate.Design.QA.Extensions;
+namespace Kwality.QCreate.Requests;
 
-using Xunit;
+using Kwality.QCreate.Builders.Abstractions;
+using Kwality.QCreate.Requests.Abstractions;
 
-internal static partial class AssertExtensions
+/// <summary>
+///     A <see cref="Request" /> implementation that seeds a request to create an instance with a certain value.
+///     This <see cref="Request" /> does NOT contain any logic on its own. It's the responsibility of the
+///     <see cref="ITypeBuilder{T}" /> instances to handle this request and act accordingly.
+/// </summary>
+/// <param name="Value">The seed value.</param>
+/// <typeparam name="T">The value of the seed.</typeparam>
+public sealed record SeededRequest<T>(T? Value) : Request
 {
-    public static void AssertType<TException>(this Exception? ex, string message)
-    {
-        Assert.True(ex != null, "The exception should NOT be null.");
-        Assert.True(message == ex.Message, $"Exception should be '{message}', but found '{ex.Message}'.");
-
-        _ = Assert.IsType<TException>(ex);
-    }
+    /// <summary>
+    ///     The seed value.
+    /// </summary>
+    public T? Value { get; } = Value;
 }

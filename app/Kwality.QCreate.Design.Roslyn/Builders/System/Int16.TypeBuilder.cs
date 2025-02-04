@@ -29,5 +29,6 @@ internal sealed class Int16TypeBuilder : global::Kwality.QCreate.Builders.Abstra
 {
     private readonly global::System.Random random = new();
 
-    public short Create() => (short)this.random.Next(short.MinValue, short.MaxValue);
+    public short Create(global::Kwality.QCreate.Requests.Abstractions.Request? request) =>
+        (short)this.random.Next(short.MinValue, short.MaxValue);
 }

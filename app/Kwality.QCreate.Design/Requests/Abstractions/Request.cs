@@ -22,17 +22,9 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-namespace Kwality.QCreate.Design.QA.Extensions;
+namespace Kwality.QCreate.Requests.Abstractions;
 
-using Xunit;
-
-internal static partial class AssertExtensions
-{
-    public static void AssertType<TException>(this Exception? ex, string message)
-    {
-        Assert.True(ex != null, "The exception should NOT be null.");
-        Assert.True(message == ex.Message, $"Exception should be '{message}', but found '{ex.Message}'.");
-
-        _ = Assert.IsType<TException>(ex);
-    }
-}
+/// <summary>
+///     The base type for a QCreate request.
+/// </summary>
+public abstract record Request;

@@ -26,5 +26,12 @@ namespace Kwality.QCreate.Builders.System;
 
 internal sealed class StringTypeBuilder : global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder<string>
 {
-    public string Create() => global::System.Guid.NewGuid().ToString();
+    public string Create(global::Kwality.QCreate.Requests.Abstractions.Request? request)
+    {
+        var value = global::System.Guid.NewGuid().ToString();
+
+        return request is global::Kwality.QCreate.Requests.SeededRequest<string> seededRequest
+            ? $"{seededRequest.Value}_{value}"
+            : value;
+    }
 }
