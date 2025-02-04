@@ -30,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kwality.QCreate.Design.Roslyn\Kwality.QCreate.Design.Roslyn.csproj" />
     <ProjectReference Include="..\Kwality.QCreate.QA.Shared\Kwality.QCreate.QA.Shared.csproj" />
+    <ProjectReference Include="..\Kwality.QCreate.Roslyn\Kwality.QCreate.Roslyn.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
 
 </Project>

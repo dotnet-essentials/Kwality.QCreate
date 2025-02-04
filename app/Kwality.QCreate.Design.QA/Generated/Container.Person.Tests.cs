@@ -25,8 +25,8 @@
 #pragma warning disable CS1591
 namespace Kwality.QCreate.Design.QA.Generated;
 
-using Kwality.QCreate.Design.QA.Extensions;
 using Kwality.QCreate.Models;
+using Kwality.QCreate.QA.Shared.Extensions;
 using Xunit;
 
 public sealed class ContainerTests

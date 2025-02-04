@@ -22,42 +22,37 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-#pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+namespace Kwality.QCreate.Abstractions;
 
-using Kwality.QCreate.QA.Shared.Extensions;
-using Kwality.QCreate.Requests;
-using Xunit;
+using Kwality.QCreate.Exceptions;
+using Kwality.QCreate.Requests.Abstractions;
 
-public sealed partial class ContainerTests
+/// <summary>
+///     API for creating anonymous objects.
+/// </summary>
+public interface IContainer
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
-    {
-        // ARRANGE.
-        var container = new Container();
+    /// <summary>
+    ///     The total number of elements to create when using <see cref="CreateMany{T}" />.
+    /// </summary>
+    int RepeatCount { get; set; }
 
-        // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
+    /// <summary>
+    ///     Create an instance of T.
+    /// </summary>
+    /// <typeparam name="T">The type to create.</typeparam>
+    /// <param name="request">The request that describes how to create an instance of T.</param>
+    /// <returns>An instance of T.</returns>
+    /// <exception cref="QCreateException">An instance of T couldn't be created.</exception>
+    T Create<T>(Request? request = null);
 
-        // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
-    }
+    /// <summary>
+    ///     Create multiple instances of T.
+    ///     The amount of instances that's returned is equal to <see cref="RepeatCount" />, which defaults to 3.
+    /// </summary>
+    /// <typeparam name="T">The type to create.</typeparam>
+    /// <param name="request">The request that describes how to create an instance of T.</param>
+    /// <returns>A collection containing multiple instances of T.</returns>
+    /// <exception cref="QCreateException">An instance of T couldn't be created.</exception>
+    IEnumerable<T> CreateMany<T>(Request? request = null);
 }

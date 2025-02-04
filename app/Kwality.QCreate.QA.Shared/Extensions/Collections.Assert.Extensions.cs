@@ -22,17 +22,29 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-namespace Kwality.QCreate.Design.QA.Extensions;
+#pragma warning disable CA1716
+#pragma warning disable CA1062
+namespace Kwality.QCreate.QA.Shared.Extensions;
 
 using Xunit;
 
-internal static partial class AssertExtensions
+/// <summary>
+///     Contain extensions for xUnit's 'Assert' functionality.
+/// </summary>
+public static partial class AssertExtensions
 {
-    public static void AssertType<TException>(this Exception? ex, string message)
+    /// <summary>
+    ///     Assert that a given collection contains the elements from another collection.
+    /// </summary>
+    /// <param name="source">The collection that contains the actual output.</param>
+    /// <param name="expected">The expected elements that should be available in source.</param>
+    public static void AssertContains<T>(this IEnumerable<T> source, IEnumerable<T> expected)
     {
-        Assert.True(ex != null, "The exception should NOT be null.");
-        Assert.True(message == ex.Message, $"Exception should be '{message}', but found '{ex.Message}'.");
+        T[] sourceSet = source.ToArray();
 
-        _ = Assert.IsType<TException>(ex);
+        foreach (T item in expected)
+        {
+            Assert.True(sourceSet.Contains(item), $"The item '{item}' is not present in the collection.");
+        }
     }
 }

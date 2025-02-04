@@ -107,5 +107,5 @@ public sealed class Container : global::Kwality.QCreate.Abstractions.IContainer
         }
     }
 
-    private sealed class TypeBuilderMap : System.Collections.Generic.Dictionary<global::System.Type, object>;
+    private sealed class TypeBuilderMap : global::System.Collections.Generic.Dictionary<global::System.Type, object>;
 }

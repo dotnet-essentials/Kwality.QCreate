@@ -23,41 +23,28 @@
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
 #pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+namespace Kwality.QCreate.Usage.QA.System;
 
-using Kwality.QCreate.QA.Shared.Extensions;
-using Kwality.QCreate.Requests;
 using Xunit;
 
 public sealed partial class ContainerTests
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
+    [Fact(DisplayName = "'Create<T>': When 'T' is a 'bool' the results alternate between 'true' and 'false'.")]
+    internal void Create_bool_alternates_between_true_and_false()
     {
         // ARRANGE.
         var container = new Container();
 
         // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
+        var r1 = container.Create<bool>();
+        var r2 = container.Create<bool>();
+        var r3 = container.Create<bool>();
+        var r4 = container.Create<bool>();
 
         // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
+        Assert.True(r1, "The 1st time a 'bool' is created, it should have the value 'true'.");
+        Assert.False(r2, "The 2nd time a 'bool' is created, it should have the value 'false'.");
+        Assert.True(r3, "The 3rd time a 'bool' is created, it should have the value 'true'.");
+        Assert.False(r4, "The 4th time a 'bool' is created, it should have the value 'false'.");
     }
 }

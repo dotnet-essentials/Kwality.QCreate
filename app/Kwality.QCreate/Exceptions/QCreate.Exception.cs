@@ -22,42 +22,30 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-#pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+namespace Kwality.QCreate.Exceptions;
 
-using Kwality.QCreate.QA.Shared.Extensions;
-using Kwality.QCreate.Requests;
-using Xunit;
-
-public sealed partial class ContainerTests
+/// <summary>
+///     A "general" exception to indicate a failure with QCreate.
+/// </summary>
+public sealed class QCreateException : Exception
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
-    {
-        // ARRANGE.
-        var container = new Container();
+    /// <summary>
+    ///     Create a new <see cref="QCreateException" /> instance.
+    /// </summary>
+    public QCreateException() { }
 
-        // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
+    /// <summary>
+    ///     Create a new <see cref="QCreateException" /> instance.
+    /// </summary>
+    /// <param name="message">The message of the exception.</param>
+    public QCreateException(string message)
+        : base(message) { }
 
-        // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
-    }
+    /// <summary>
+    ///     Create a new <see cref="QCreateException" /> instance.
+    /// </summary>
+    /// <param name="message">The message of the exception.</param>
+    /// <param name="innerException">The inner <see cref="Exception" /> of the exception.</param>
+    public QCreateException(string message, Exception innerException)
+        : base(message, innerException) { }
 }

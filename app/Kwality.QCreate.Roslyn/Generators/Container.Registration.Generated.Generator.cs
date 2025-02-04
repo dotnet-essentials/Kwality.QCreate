@@ -23,41 +23,33 @@
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
 #pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+namespace Kwality.QCreate.Roslyn.Generators;
 
-using Kwality.QCreate.QA.Shared.Extensions;
-using Kwality.QCreate.Requests;
-using Xunit;
+using global::System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
-public sealed partial class ContainerTests
+[Generator]
+public sealed class ContainerRegistrationGeneratedGenerator : IIncrementalGenerator
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
+    private const string source = """
+        #nullable enable
+        namespace Kwality.QCreate;
+
+        internal static class GeneratorBasedGeneratedTypeBuilders
+        {
+            public static global::System.Collections.Generic.IEnumerable<global::Kwality.QCreate.Data.TypeBuilderDefinition> GetTypeBuildersDefinition()
+            {
+                return [];
+            }
+        }
+        """;
+
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        // ARRANGE.
-        var container = new Container();
+        context.RegisterPostInitializationOutput(AddContainerSource);
 
-        // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
-
-        // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
+        static void AddContainerSource(IncrementalGeneratorPostInitializationContext ctx) =>
+            ctx.AddSource("Container.Registration.Generated.g.cs", SourceText.From(source, Encoding.UTF8));
     }
 }

@@ -22,42 +22,28 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-#pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+#pragma warning disable CA1716
+#pragma warning disable CA1062
+namespace Kwality.QCreate.QA.Shared.Extensions;
 
-using Kwality.QCreate.QA.Shared.Extensions;
-using Kwality.QCreate.Requests;
 using Xunit;
 
-public sealed partial class ContainerTests
+/// <summary>
+///     Contain extensions for xUnit's 'Assert' functionality.
+/// </summary>
+public static partial class AssertExtensions
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
+    /// <summary>
+    ///     Assert that the given exception is of a certain type with a given message.
+    /// </summary>
+    /// <param name="ex">The exception to check.</param>
+    /// <param name="message">The message of the exception.</param>
+    /// <typeparam name="TException">The type that the given exception should be.</typeparam>
+    public static void AssertType<TException>(this Exception? ex, string message)
     {
-        // ARRANGE.
-        var container = new Container();
+        Assert.True(ex != null, "The exception should NOT be null.");
+        Assert.True(message == ex.Message, $"Exception should be '{message}', but found '{ex.Message}'.");
 
-        // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
-
-        // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
+        _ = Assert.IsType<TException>(ex);
     }
 }

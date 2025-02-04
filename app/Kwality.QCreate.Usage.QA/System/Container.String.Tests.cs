@@ -23,7 +23,7 @@
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
 #pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+namespace Kwality.QCreate.Usage.QA.System;
 
 using Kwality.QCreate.QA.Shared.Extensions;
 using Kwality.QCreate.Requests;

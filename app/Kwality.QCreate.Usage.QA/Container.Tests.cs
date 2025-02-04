@@ -23,17 +23,17 @@
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
 #pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA;
+namespace Kwality.QCreate.Usage.QA;
 
 using Kwality.QCreate.Abstractions;
 using Kwality.QCreate.Builders.Abstractions;
 using Kwality.QCreate.Exceptions;
-using Kwality.QCreate.Models;
 using Kwality.QCreate.QA.Shared.Extensions;
 using Kwality.QCreate.Requests.Abstractions;
 using Xunit;
+using Container = Kwality.QCreate.Container;
 
-public sealed class ContainerTests
+public sealed partial class ContainerTests
 {
     [Fact(DisplayName = "'Create<T>': When 'T' is a type for which NO builder is present, an exception is raised.")]
     internal void Create_unsupported_throws()
@@ -110,20 +110,6 @@ public sealed class ContainerTests
         Assert.True(r1 != r2, "The generated values must be unique.");
     }
 
-    [Fact(DisplayName = "A user-defined builder for 'T' has priority over a generated builder for 'T'.")]
-    internal void User_defined_builders_have_priority_over_the_generated_builders()
-    {
-        // ARRANGE.
-        var container = new Container();
-        container.Register(new FixedPersonTypeBuilder());
-
-        // ACT.
-        Person r1 = container.Create<Person>();
-
-        // ASSERT.
-        Assert.True(r1 == new Person("Donald", "Trump"), "The generated value must be 'Donald Trump'.");
-    }
-
     private sealed class FixedStringTypeBuilder : ITypeBuilder<string>
     {
         public string Create(IContainer container, Request? request) => "Hello, World!";
@@ -133,10 +119,5 @@ public sealed class ContainerTests
     {
         public (int, int) Create(IContainer container, Request? _) =>
             (container.Create<int>(), container.Create<int>());
-    }
-
-    private sealed class FixedPersonTypeBuilder : ITypeBuilder<Person>
-    {
-        public Person Create(IContainer container, Request? request) => new("Donald", "Trump");
     }
 }

@@ -1,4 +1,4 @@
-﻿// =====================================================================================================================
+// =====================================================================================================================
 // == LICENSE:       Copyright (c) 2025 Kevin De Coninck
 // ==
 // ==                Permission is hereby granted, free of charge, to any person
@@ -23,41 +23,39 @@
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
 #pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+namespace Kwality.QCreate.QA.Generators.Builders.System;
 
-using Kwality.QCreate.QA.Shared.Extensions;
-using Kwality.QCreate.Requests;
+using Kwality.QCreate.QA.Verifiers;
+using Kwality.QCreate.Roslyn.Generators.Builders.System;
 using Xunit;
 
-public sealed partial class ContainerTests
+public sealed class GuidTypeBuilderGeneratorTests
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
+    [Fact(DisplayName = "The 'ITypeBuilder<Guid>' implementation is added (always).")]
+    internal void The_guid_type_builder_is_added()
     {
         // ARRANGE.
-        var container = new Container();
+        var sut = new SourceGeneratorVerifier<GuidTypeBuilderGenerator>
+        {
+            InputSources = [],
+            ExpectedGeneratedSources =
+            [
+                """
+                    #nullable enable
+                    namespace Kwality.QCreate.Builders.System;
 
-        // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
+                    internal sealed class GuidTypeBuilder : global::Kwality.QCreate.Builders.Abstractions.ITypeBuilder<global::System.Guid>
+                    {
+                        public global::System.Guid Create(
+                            global::Kwality.QCreate.Abstractions.IContainer container,
+                            global::Kwality.QCreate.Requests.Abstractions.Request? request
+                        ) => global::System.Guid.NewGuid();
+                    }
+                    """,
+            ],
+        };
 
-        // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
+        // ACT & ASSERT.
+        sut.Verify();
     }
 }

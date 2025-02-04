@@ -1,4 +1,4 @@
-﻿// =====================================================================================================================
+// =====================================================================================================================
 // == LICENSE:       Copyright (c) 2025 Kevin De Coninck
 // ==
 // ==                Permission is hereby granted, free of charge, to any person
@@ -22,23 +22,28 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-namespace Kwality.QCreate.Design.QA.Extensions;
+#pragma warning disable CA2201
+namespace Kwality.QCreate.QA.Verifiers.Abstractions;
 
-using Xunit;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
-internal static partial class AssertExtensions
+internal abstract class RoslynComponentVerifier
 {
-    public static void AssertHasPrefix(this string value, string prefix)
+    public string[]? InputSources { get; init; }
+
+    protected Compilation CreateCompilation()
     {
-        var startsWith = value.StartsWith(prefix, StringComparison.CurrentCulture);
+        var trustedPlatformAssemblies =
+            AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")?.ToString()?.Split(Path.PathSeparator) ?? [];
 
-        Assert.True(startsWith, $"The string should start with '{prefix}'.");
-    }
+        var references = trustedPlatformAssemblies.Select(p => MetadataReference.CreateFromFile(p)).ToList();
 
-    public static void AssertEndsWithGuid(this string value, string prefix)
-    {
-        var valueWithoutPrefix = value.Replace(prefix, "", StringComparison.CurrentCulture);
-
-        Assert.True(Guid.TryParse(valueWithoutPrefix, out _), "The string should end with a GUID.");
+        return CSharpCompilation.Create(
+            "Kwality.QCreate.QA",
+            (this.InputSources ?? []).Select(x => CSharpSyntaxTree.ParseText(x)),
+            references,
+            new(OutputKind.DynamicallyLinkedLibrary)
+        );
     }
 }

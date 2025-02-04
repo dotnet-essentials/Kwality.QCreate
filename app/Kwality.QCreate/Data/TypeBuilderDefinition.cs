@@ -22,42 +22,24 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-#pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+namespace Kwality.QCreate.Data;
 
-using Kwality.QCreate.QA.Shared.Extensions;
-using Kwality.QCreate.Requests;
-using Xunit;
+using Kwality.QCreate.Builders.Abstractions;
 
-public sealed partial class ContainerTests
+/// <summary>
+///     A definition for an <see cref="ITypeBuilder{T}" /> instance.
+/// </summary>
+/// <param name="Type">The type the associated <see cref="ITypeBuilder{T}" /> can create.</param>
+/// <param name="Builder">The <see name="ITypeBuilder{T}" /> instance.</param>
+public sealed record TypeBuilderDefinition(Type Type, object Builder)
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
-    {
-        // ARRANGE.
-        var container = new Container();
+    /// <summary>
+    ///     The type the associated <see cref="ITypeBuilder{T}" /> can create.
+    /// </summary>
+    public Type Type { get; } = Type;
 
-        // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
-
-        // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
-    }
+    /// <summary>
+    ///     The <see name="ITypeBuilder{T}" /> instance.
+    /// </summary>
+    public object Builder { get; } = Builder;
 }

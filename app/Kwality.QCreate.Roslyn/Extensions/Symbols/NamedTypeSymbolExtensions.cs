@@ -22,42 +22,15 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-#pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+namespace Kwality.QCreate.Roslyn.Extensions.Symbols;
 
-using Kwality.QCreate.QA.Shared.Extensions;
-using Kwality.QCreate.Requests;
-using Xunit;
+using Microsoft.CodeAnalysis;
 
-public sealed partial class ContainerTests
+internal static class NamedTypeSymbolExtensions
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
-    {
-        // ARRANGE.
-        var container = new Container();
+    public static INamedTypeSymbol? GetImplementingInterface(this INamedTypeSymbol symbol, string interfaceFqName) =>
+        symbol.Interfaces.FirstOrDefault(s => s.HasName(interfaceFqName));
 
-        // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
-
-        // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
-    }
+    private static bool HasName(this INamedTypeSymbol symbol, string name) =>
+        symbol.OriginalDefinition.ToDisplayString() == name;
 }

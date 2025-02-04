@@ -22,42 +22,22 @@
 // ==                FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // ==                OTHER DEALINGS IN THE SOFTWARE.
 // =====================================================================================================================
-#pragma warning disable CS1591
-namespace Kwality.QCreate.Design.QA.System;
+namespace Kwality.QCreate.Builders.Abstractions;
 
-using Kwality.QCreate.QA.Shared.Extensions;
-using Kwality.QCreate.Requests;
-using Xunit;
+using Kwality.QCreate.Abstractions;
+using Kwality.QCreate.Requests.Abstractions;
 
-public sealed partial class ContainerTests
+/// <summary>
+///     API for creating a single instance of T.
+/// </summary>
+/// <typeparam name="T">The type of the object that can be created by this builder.</typeparam>
+public interface ITypeBuilder<out T>
 {
-    [Fact(DisplayName = "'Create<T>': When 'T' is a 'string' a unique 'string' is returned.")]
-    internal void Create_string_returns_a_unique_string()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>();
-        var r2 = container.Create<string>();
-
-        // ASSERT.
-        Assert.True(Guid.TryParse(r1, out _), "The generated string must be a 'GUID'.");
-        Assert.True(Guid.TryParse(r2, out _), "The generated string must be a 'GUID'.");
-        Assert.True(r1 != r2, "The generated strings must be unique.");
-    }
-
-    [Fact(DisplayName = "'Create<T> (seeded)': When 'T' is a 'string' the seed is used as a prefix.")]
-    internal void Create_string_with_seed_uses_the_seed_as_prefix()
-    {
-        // ARRANGE.
-        var container = new Container();
-
-        // ACT.
-        var r1 = container.Create<string>(new SeededRequest<string>("Hello"));
-
-        // ASSERT.
-        r1.AssertHasPrefix("Hello_");
-        r1.AssertEndsWithGuid("Hello_");
-    }
+    /// <summary>
+    ///     Create an instance of T.
+    /// </summary>
+    /// <param name="container">The <see cref="IContainer" /> through which causes this method to be called.</param>
+    /// <param name="request">The request that describes how to an instance of T was requested.</param>
+    /// <returns>An instance of T.</returns>
+    T Create(IContainer container, Request? request);
 }
