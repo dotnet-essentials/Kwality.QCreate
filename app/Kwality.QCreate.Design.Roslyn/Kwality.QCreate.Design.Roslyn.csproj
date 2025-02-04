@@ -17,4 +17,8 @@
     <CompilerVisibleProperty Include="ProjectDir" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kwality.QCreate.Design\Kwality.QCreate.Design.csproj" />
+  </ItemGroup>
+
 </Project>
