@@ -35,6 +35,12 @@ public sealed class Container
     };
 
     /// <summary>
+    ///     The total number of elements to create when using <see cref="CreateMany{T}" />.
+    /// </summary>
+    /// <remarks>Defaults to 3.</remarks>
+    public int RepeatCount { get; set; } = 3;
+
+    /// <summary>
     ///     Create an instance of T.
     /// </summary>
     /// <typeparam name="T">The type to create.</typeparam>
@@ -50,14 +56,15 @@ public sealed class Container
     }
 
     /// <summary>
-    ///     Create 3 instances of T.
+    ///     Create multiple instances of T.
+    ///     The amount of instances that's returned is equal to <see cref="RepeatCount" />, which defaults to 3.
     /// </summary>
     /// <typeparam name="T">The type to create.</typeparam>
-    /// <returns>A collection containing 3 instances of T.</returns>
+    /// <returns>A collection containing multiple instances of T.</returns>
     /// <exception cref="global::Kwality.QCreate.Exceptions.QCreateException">An instance of T couldn't be created.</exception>
     public global::System.Collections.Generic.IEnumerable<T> CreateMany<T>()
     {
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < this.RepeatCount; i++)
         {
             yield return this.Create<T>();
         }

@@ -44,8 +44,8 @@ public sealed partial class ContainerTests
         ex.AssertType<QCreateException>($"No builder registered for type '{typeof((int, int))}'.");
     }
 
-    [Fact(DisplayName = "'CreateMany<T>': Returns 3 elements.")]
-    internal void Create_multiple_returns_3_elements()
+    [Fact(DisplayName = "'CreateMany<T>': Returns 3 elements by default.")]
+    internal void Create_multiple_returns_3_elements_by_default()
     {
         // ARRANGE.
         var container = new Container();
@@ -58,5 +58,22 @@ public sealed partial class ContainerTests
         Assert.True(result[0], "The 1st created 'bool' should have the value 'true'.");
         Assert.False(result[1], "The 2nd created 'bool' should have the value 'false'.");
         Assert.True(result[2], "The 3rd created 'bool' should have the value 'true'.");
+    }
+
+    [Fact(DisplayName = "'CreateMany<T>': Returns the requested amount of elements.")]
+    internal void Create_multiple_returns_requested_elements_by_default()
+    {
+        // ARRANGE.
+        var container = new Container { RepeatCount = 4 };
+
+        // ACT.
+        var result = container.CreateMany<bool>().ToArray();
+
+        // ASSERT.
+        Assert.True(4 == result.Length, "Exactly 4 elements should be returned.");
+        Assert.True(result[0], "The 1st created 'bool' should have the value 'true'.");
+        Assert.False(result[1], "The 2nd created 'bool' should have the value 'false'.");
+        Assert.True(result[2], "The 3rd created 'bool' should have the value 'true'.");
+        Assert.False(result[1], "The 4th created 'bool' should have the value 'false'.");
     }
 }
